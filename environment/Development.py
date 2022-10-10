@@ -9,7 +9,7 @@ class Development:
     ###############         DB          ###############
     SQL_HOST= "127.0.0.1"
     SQL_USER = "leonardo"
-    SQL_PASS = "W4rw1ck.2022365"
+    SQL_PASS = "wuhy0%e!eog^@2wIiBD0wPk&2bOp4Lf&z4"
     SQL_DB = "estacionamientos"
 
     ##############      CONSTANTES      ###############
