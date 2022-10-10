@@ -15,9 +15,9 @@ env = os.getenv('INT_ENV', default='dev')
 logging.info("env: %s"%(env))
 config = app_config[env]
 
-"""PARA OBTENER REPORTES ANUALES, USAR LA SIGUIENTE QUERY:
+"""PARA OBTENER REPORTES MENSUALES, USAR LA SIGUIENTE QUERY:
 
-SELECT SUM(valor) as Total, day(from_unixtime(floor(hora_salida))) AS DIA FROM cobros GROUP BY DIA;"""
+SELECT SUM(valor) as Total, month(from_unixtime(floor(hora_salida))) AS MES FROM cobros GROUP BY MES;"""
 
 def reporteMensual(mes):
     """Función que permite insertar en la tabla VEHICULOS de la BD
@@ -32,6 +32,6 @@ def reporteMensual(mes):
     if errorSQL is not None:
         LOGGER.warning("Error: Se produjo un error al conectar a la base de datos: %s"%(str(errorSQL)))
     else:
-        consultaSQL = f"SELECT SUM(valor) as Total, month(from_unixtime(floor(hora_salida))) AS MES FROM cobros WHERE MES='{mes}' GROUP BY DIA;'"
+        consultaSQL = f"SELECT SUM(valor) as Total, month(from_unixtime(floor(hora_salida))) AS MES FROM cobros WHERE month(from_unixtime(floor(hora_salida)))='{mes}' GROUP BY MES;'"
         errorMySQL, datosEntregadosMySQL = consultaDBSQL(consultaSQL, dbSQL)
-    return datosEntregadosMySQL, errorMySQL
+    return errorMySQL, datosEntregadosMySQL

@@ -40,25 +40,21 @@ class ManejoDeArchivos:
             error = "Error, se produjo un error al intentar guardar el archivo Excel: %s"%(err)
         return error
 
-    def guardarPDF(self,df,nombreColumnas,writer):
+    def guardarPDF(self,df,writer):
         error = None
-        dataFrame = pd.DataFrame(df,columns=nombreColumnas)  
         try:
-            fig,ax = plt.subplots(figsize=(8.5,11),width_ratios=None)
-            plt.title("Reporte PDF")
+            cm=1/2.54
+            fig,ax = plt.subplots(figsize=(1.1811,2.75591),width_ratios=None)
             ax.axis('off')
-            theTable = ax.table(cellText = dataFrame.values, colLabels = dataFrame.columns, loc='upper left', cellLoc='left')
-            theTable.auto_set_column_width([0,1,2,3,4])
-            theTable.set_fontsize(9)
+            text=df
+            fig.text(0.05,0.95,text,transform=fig.transFigure)
             pp = PdfPages(writer)
             d = pp.infodict()
-            d['Title'] = "Reporte PDF"
             d['Author'] = "Leonardo Godoy S"
-            d['Subject'] = "Presentación de un PDF de ejemplo"
-            d['Keywords'] = ""
+            d['Subject'] = "Registro de ingreso"
             d['CreationDate'] = datetime.today()
             d['ModDate'] = datetime.today()
-            d['Creator'] = "Leonardo Godoy S."
+            d['Creator'] = "Sistema de Gestión de Estacionamientos 1.0"
             pp.savefig(fig, orientation='portrait', bbox_inches='tight')
             pp.close()
         except Exception as err:

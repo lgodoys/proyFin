@@ -19,9 +19,9 @@ config = app_config[env]
 
 INSERT INTO espacios (idespacios,vehiculos_idvehiculos,edificios_idedificios) VALUES (idespacio,(SELECT idvehiculo FROM vehiculos WHERE placa = '{placa}'),(SELECT idedificio FROM edificios WHERE direccion='{direccion}');"""
 
-def registroAuto(idespacio,placa,direccion):
+def registroEspacio(idespacio,placa,direccion):
     """Función que permite insertar en la tabla ESPACIOS de la BD
-    cuando un vehiculo sale del estacionamiento, para generar el cobro
+    un nuevo espacio administrado
     Requiere 3 parámetros, idespacio, placa y direccion.
     Retorna tres parámetros de la base de datos:
     - respuestaMySQL: la respuesta que genera la clase cuando cierra la escritura

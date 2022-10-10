@@ -29,6 +29,6 @@ def reporteEstadia():
     if errorSQL is not None:
         LOGGER.warning("Error: Se produjo un error al conectar a la base de datos: %s"%(str(errorSQL)))
     else:
-        consultaSQL = f"SELECT ROUND(SUM((hora_salida-hora_entrada)/60/60)) as tiempoEstadiaEnHoras, vehiculos_idvehiculos from cobros GROUP BY vehiculos_idvehiculos;;'"
+        consultaSQL = f"SELECT ROUND(SUM((hora_salida-hora_entrada)/60/60)) as tiempoEstadiaEnHoras, vehiculos_idvehiculos from cobros GROUP BY vehiculos_idvehiculos;'"
         errorMySQL, datosEntregadosMySQL = consultaDBSQL(consultaSQL, dbSQL)
-    return datosEntregadosMySQL, errorMySQL
+    return errorMySQL, datosEntregadosMySQL

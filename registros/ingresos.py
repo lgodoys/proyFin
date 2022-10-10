@@ -36,7 +36,11 @@ def ingresoVehiculos(placa):
         consultaSQL = f"INSERT INTO cobros (hora_entrada,vehiculos_idvehiculos,espacios_idespacios) VALUES ({horaEntrada},(SELECT idvehiculos FROM vehiculos WHERE placa='{placa}'),(SELECT idespacios FROM espacios WHERE vehiculos_idvehiculos=(SELECT idvehiculos from vehiculos where placa='{placa}')));"
         respuestaMySQL, estado, errorMySQL = insertarDatosSQL(consultaSQL,dbSQL)
         if errorMySQL is None or not estado:
+            errorSQL, isConnectedSQL, dbSQL = llamadaBDMySQL()
+            if errorSQL is None:
+                consultaSQL = f"SELECT idcobros,hora_entrada,vehiculos_idvehiculos,espacios_idespacios FROM cobros WHERE vehiculos_idvehiculos=(SELECT idvehiculos FROM vehiculos WHERE placa='{placa}') ORDER BY hora_entrada DESC LIMIT 1;"
+                errorMySQL, datosEntregadosMySQL = consultaDBSQL(consultaSQL, dbSQL)
             LOGGER.info(respuestaMySQL)
         else:
             LOGGER.warning(errorMySQL)
-    return respuestaMySQL,estado,errorMySQL
+    return datosEntregadosMySQL,errorMySQL

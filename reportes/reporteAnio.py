@@ -33,6 +33,6 @@ def reporteAnual(year):
     if errorSQL is not None:
         LOGGER.warning("Error: Se produjo un error al conectar a la base de datos: %s"%(str(errorSQL)))
     else:
-        consultaSQL = f"SELECT SUM(valor) as Total, year(from_unixtime(floor(hora_salida))) AS AÑO FROM cobros WHERE AÑO='{year}' GROUP BY AÑO;'"
+        consultaSQL = f"SELECT SUM(valor) as Total, year(from_unixtime(floor(hora_salida))) AS AÑO FROM cobros WHERE year(from_unixtime(floor(hora_salida)))='{year}' GROUP BY AÑO;'"
         errorMySQL, datosEntregadosMySQL = consultaDBSQL(consultaSQL, dbSQL)
-    return datosEntregadosMySQL, errorMySQL
+    return errorMySQL, datosEntregadosMySQL
