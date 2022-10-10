@@ -8,12 +8,12 @@ sys.path.append(os.path.dirname(SCRIPT_DIR))
 from environment import app_config
 from utils.Exceptions import *
 from utils.util import *
-from guiIngresos import *
-from guiRegistrosEdificio import *
-from guiRegistroEspacios import *
-from guiRegistroVehiculo import *
-from guiReportes import *
-from guiSalida import *
+from gui.guiIngresos import *
+from gui.guiRegistrosEdificio import *
+from gui.guiRegistroEspacios import *
+from gui.guiRegistroVehiculo import *
+from gui.guiReportes import *
+from gui.guiSalida import *
 
 class App(tk.Tk):
     def __init__(self):
