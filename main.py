@@ -1,6 +1,8 @@
 import sys
 import os
 import tkinter as tk
+from functools import partial
+
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
@@ -8,6 +10,7 @@ sys.path.append(os.path.dirname(SCRIPT_DIR))
 from environment import app_config
 from utils.Exceptions import *
 from utils.util import *
+from reportes.reporteEspacios import *
 from gui.guiIngresos import *
 from gui.guiRegistrosEdificio import *
 from gui.guiRegistroEspacios import *
@@ -28,10 +31,18 @@ class App(tk.Tk):
         menubar.add_cascade(label="Archivo", menu=fileMenu)
         self.config(menu=menubar)
 
+        repLibres = self.reporteLibres()
+        repOcupados= self.reporteOcupados()
+
+
+        ttk.Label(self,text="Espacios disponibles: "+ str(repLibres)).place(x=12, y=2)
+        ttk.Label(self,text="Espacios ocupados: "+ str(repOcupados)).place(x=240, y=2)
+
+
         ttk.Style().map("C.TButton", foreground=[('!active','#404041'),('pressed','#404041'),('active','#404041')], background=[('!active','#FAAD3F'),('pressed','!disabled','#FAAD3F'),('active','#F48120')])
         ttk.Style().configure("TLabel", background="#404041", foreground="#F48120")
 
-        ttk.Label(self,text="SGE 1.0").place(x=265, y=10)
+        ttk.Label(self,text="SGE 1.0", font=("Arial",24,"bold")).place(x=230, y=30)
 
         ttk.Button(self, text="Ingresos", command=self.ingresos, style="C.TButton").place(x=75, y=80)
         ttk.Button(self, text="Salidas", command=self.salidas, style="C.TButton").place(x=237, y=80)
@@ -67,6 +78,19 @@ class App(tk.Tk):
         window=Cobros(self)
         window.grab_set()
 
+    def reporteLibres(self):
+        errorMySQL, datosEntregadosMySQL = reporteEspacioLibre()
+        if errorMySQL is None:
+            libres = datosEntregadosMySQL[0][0]
+            return libres
+            
+    
+    def reporteOcupados(self):
+        errorMySQL, datosEntregadosMySQL = reporteEspacioOcupado()
+        if errorMySQL is None:
+            ocupados = datosEntregadosMySQL[0][0]
+            return ocupados
+            
 
 if __name__ == "__main__":
     app = App()

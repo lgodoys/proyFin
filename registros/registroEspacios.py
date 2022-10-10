@@ -19,7 +19,7 @@ config = app_config[env]
 
 INSERT INTO espacios (idespacios,vehiculos_idvehiculos,edificios_idedificios) VALUES (idespacio,(SELECT idvehiculo FROM vehiculos WHERE placa = '{placa}'),(SELECT idedificio FROM edificios WHERE direccion='{direccion}');"""
 
-def registroEspacio(idespacio,placa,direccion):
+def registroEspacio(idespacio,direccion):
     """Función que permite insertar en la tabla ESPACIOS de la BD
     un nuevo espacio administrado
     Requiere 3 parámetros, idespacio, placa y direccion.
@@ -32,7 +32,7 @@ def registroEspacio(idespacio,placa,direccion):
     if errorSQL is not None:
         LOGGER.warning("Error: Se produjo un error al conectar a la base de datos: %s"%(str(errorSQL)))
     else:
-        consultaSQL = f"INSERT INTO espacios (idespacios,vehiculos_idvehiculos,edificios_idedificios) VALUES ({idespacio},(SELECT idvehiculo FROM vehiculos WHERE placa = '{placa}'),(SELECT idedificio FROM edificios WHERE direccion='{direccion}');"
+        consultaSQL = f"INSERT INTO espacios (idespacios,edificios_idedificios) VALUES ({idespacio},(SELECT idedificios FROM edificios WHERE direccion='{direccion}'));"
         respuestaMySQL, estado, errorMySQL = insertarDatosSQL(consultaSQL,dbSQL)
         if errorMySQL is None or not estado:
             LOGGER.info(respuestaMySQL)

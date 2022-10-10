@@ -33,7 +33,7 @@ def registroEdificio(direccion,contacto,telefono):
     if errorSQL is not None:
         LOGGER.warning("Error: Se produjo un error al conectar a la base de datos: %s"%(str(errorSQL)))
     else:
-        consultaSQL = f"INSERT INTO edificios (idedificio,direccion,contacto,telefono) VALUES ('{idedificio}','{direccion}','{contacto}','{telefono}');"
+        consultaSQL = f"INSERT INTO edificios (idedificios,direccion,contacto,telefono) VALUES ('{idedificio}','{direccion}','{contacto}','{telefono}');"
         respuestaMySQL, estado, errorMySQL = insertarDatosSQL(consultaSQL,dbSQL)
         if errorMySQL is None or not estado:
             LOGGER.info(respuestaMySQL)
