@@ -51,9 +51,12 @@ class Cobros(tk.Toplevel):
         idVehiculo = datosEntregadosMySQL[0][4]
         idEspacio = datosEntregadosMySQL[0][5]
         manejador = ManejoDeArchivos()
+        print(manejador)
         if errorMySQL is None:
             texto="ID Vehiculo: "+str(idVehiculo)+"\nID Ingreso: "+str(idIngreso)+"\nHora de Ingreso: "+str(horaEntrada)+"\nHora de Salida: "+str(horaSalida)+"\nValor: "+str(valor)+"\nID Espacio: "+str(idEspacio)
-            manejador.guardarPDF(texto,"../data/cobro"+str(idVehiculo)+".pdf")
+            error = manejador.guardarPDF(texto,"../data/cobro"+str(idVehiculo)+".pdf")
+            if error is not None:
+                LOGGER.warning(error)
             texto="ID Vehiculo: "+str(idVehiculo)+"\nHora de Ingreso: "+str(horaEntrada)+"\nHora de Salida: "+str(horaSalida)+"\nValor: "+str(valor)
             ask = messagebox.askquestion("Resultado de ejecución",texto)
             if ask == 'yes':

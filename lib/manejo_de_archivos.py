@@ -1,3 +1,4 @@
+import sys
 import os
 from datetime import datetime
 import pandas as pd
@@ -5,6 +6,8 @@ from pandas import ExcelWriter
 import numpy as numpy
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
+
+dirpath = os.path.dirname(os.path.abspath(__file__))
 
 class ManejoDeArchivos:
     def crearDataFrame(self,archivo, col_list):
@@ -33,7 +36,7 @@ class ManejoDeArchivos:
         error = None
         dataFrame = pd.DataFrame(df,columns=nombreColumnas)
         try:
-            wr2ter = ExcelWriter(writer)
+            wr2ter = ExcelWriter(dirpath+"/"+writer)
             dataFrame.to_excel(wr2ter,"Reporte de prueba",index=False, header=True)
             wr2ter.close()
         except Exception as err:
@@ -43,12 +46,19 @@ class ManejoDeArchivos:
     def guardarPDF(self,df,writer):
         error = None
         try:
-            cm=1/2.54
+            print(dirpath)
+            print(df,writer)
+            print("inicia writer")
             fig,ax = plt.subplots(figsize=(1.1811,2.75591),width_ratios=None)
+            print("crea figura")
             ax.axis('off')
+            print("crea ax")
             text=df
+            print(text)
             fig.text(0.05,0.95,text,transform=fig.transFigure)
-            pp = PdfPages(writer)
+            print("crea fig")
+            pp = PdfPages(dirpath+"/"+writer)
+            print("crea pdf")
             d = pp.infodict()
             d['Author'] = "Leonardo Godoy S"
             d['Subject'] = "Registro de ingreso"

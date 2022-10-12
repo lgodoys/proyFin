@@ -33,7 +33,7 @@ def ingresoVehiculos(placa):
     if errorSQL is not None:
         LOGGER.warning("Error: Se produjo un error al conectar a la base de datos: %s"%(str(errorSQL)))
     else:
-        consultaSQL = f"UPDATE espacios SET vehiculos_idvehiculos=(SELECT idvehiculos FROM vehiculos WHERE placa='{placa}') WHERE isnull(vehiculos_idvehiculos ORDER BY idespacios DESC LIMIT 1;"
+        consultaSQL = f"UPDATE espacios SET vehiculos_idvehiculos=(SELECT idvehiculos FROM vehiculos WHERE placa='{placa}') WHERE isnull(vehiculos_idvehiculos) ORDER BY idespacios DESC LIMIT 1;"
         mensaje, estado, error = actualizarDatosSQL(consultaSQL,dbSQL)
         if error is None or not estado:
             errorSQL, isConnectedSQL, dbSQL = llamadaBDMySQL()

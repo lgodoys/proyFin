@@ -47,7 +47,9 @@ class Ingresos(tk.Toplevel):
         manejador = ManejoDeArchivos()
         if errorMySQL is None:
             texto="ID Ingreso: "+str(idIngreso)+"\nID Vehiculo: "+str(idVehiculo)+"\nID Espacio: "+str(idEspacio)+"\nHora de Ingreso: "+str(horaEntrada)
-            manejador.guardarPDF(texto,"../data/ingreso"+str(idVehiculo)+".pdf")
+            error = manejador.guardarPDF(texto,"../data/ingreso"+str(idVehiculo)+".pdf")
+            if error is not None:
+                LOGGER.warning(error)
             ask = messagebox.askquestion("Resultado de ejecución",texto)
             if ask == 'yes':
                 self.destroy()
