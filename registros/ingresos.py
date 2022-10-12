@@ -33,14 +33,21 @@ def ingresoVehiculos(placa):
     if errorSQL is not None:
         LOGGER.warning("Error: Se produjo un error al conectar a la base de datos: %s"%(str(errorSQL)))
     else:
-        consultaSQL = f"INSERT INTO cobros (hora_entrada,vehiculos_idvehiculos,espacios_idespacios) VALUES ({horaEntrada},(SELECT idvehiculos FROM vehiculos WHERE placa='{placa}'),(SELECT idespacios FROM espacios WHERE isnull(vehiculos) ORDER BY idespacios DESC LIMIT 1)); UPDATE estacionamientos.espacios SET vehiculos=(SELECT idvehiculos FROM estacionamientos.vehiculos WHERE placa='{placa}') WHERE isnull(vehiculos) LIMIT 1;"
+        consultaSQL = f"UPDATE espacios SET vehiculos_idvehiculos=(SELECT idvehiculos FROM vehiculos WHERE placa='{placa}') WHERE isnull(vehiculos_idvehiculos ORDER BY idespacios DESC LIMIT 1;"
         respuestaMySQL, estado, errorMySQL = insertarDatosSQL(consultaSQL,dbSQL)
         if errorMySQL is None or not estado:
-            errorSQL, isConnectedSQL, dbSQL = llamadaBDMySQL()
-            if errorSQL is None:
-                consultaSQL = f"SELECT idcobros,hora_entrada,vehiculos_idvehiculos,espacios_idespacios FROM cobros WHERE vehiculos_idvehiculos=(SELECT idvehiculos FROM vehiculos WHERE placa='{placa}') ORDER BY hora_entrada DESC LIMIT 1;"
-                errorMySQL, datosEntregadosMySQL = consultaDBSQL(consultaSQL, dbSQL)
-            LOGGER.info(respuestaMySQL)
+            consultaSQL = f"INSERT INTO cobros (hora_entrada,vehiculos_idvehiculos,espacios_idespacios) VALUES ({horaEntrada},(SELECT idvehiculos FROM vehiculos WHERE placa='{placa}'),(SELECT idespacios FROM espacios WHERE vehiculos_idvehiculos=(SELECT idvehiculos FROM vehiculos WHERE placa='{placa}')));"
+            respuestaMySQL, estado, errorMySQL = insertarDatosSQL(consultaSQL,dbSQL)
+            if errorMySQL is None or not estado:
+                errorSQL, isConnectedSQL, dbSQL = llamadaBDMySQL()
+                if errorSQL is None:
+                    consultaSQL = f"SELECT idcobros,hora_entrada,vehiculos_idvehiculos,espacios_idespacios FROM cobros WHERE vehiculos_idvehiculos=(SELECT idvehiculos FROM vehiculos WHERE placa='{placa}') ORDER BY hora_entrada DESC LIMIT 1;"
+                    errorMySQL, datosEntregadosMySQL = consultaDBSQL(consultaSQL, dbSQL)
+                    LOGGER.info(respuestaMySQL)
+                else:
+                    LOGGER.warning(errorMySQL)
+            else:
+                LOGGER.warning(errorMySQL)
         else:
             LOGGER.warning(errorMySQL)
     return datosEntregadosMySQL,errorMySQL

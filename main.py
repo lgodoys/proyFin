@@ -1,8 +1,6 @@
 import sys
 import os
 import tkinter as tk
-from functools import partial
-
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
@@ -84,7 +82,6 @@ class App(tk.Tk):
             libres = datosEntregadosMySQL[0][0]
             return libres
             
-    
     def reporteOcupados(self):
         errorMySQL, datosEntregadosMySQL = reporteEspacioOcupado()
         if errorMySQL is None:
