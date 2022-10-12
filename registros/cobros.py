@@ -52,15 +52,27 @@ def salida(placa):
                     LOGGER.warning("Error: Se produjo un error al conectar a la base de datos: %s"%(str(errorSQL)))
                 else:
                     consultaSQL = f"UPDATE cobros SET hora_salida={horaSalida},valor={valor} WHERE idcobros={idcobros} AND vehiculos_idvehiculos=(SELECT idvehiculos FROM vehiculos WHERE placa='{placa}');"
-                    respuestaMySQL, estado, errorMySQL = insertarDatosSQL(consultaSQL,dbSQL)
-                    if errorMySQL is None or not estado:
+                    mensaje, estado, error = actualizarDatosSQL(consultaSQL,dbSQL)
+                    if error is None or not estado:
                         errorSQL, isConnectedSQL, dbSQL = llamadaBDMySQL()
                         if errorSQL is None:
-                            consultaSQL = f"SELECT idcobros,hora_entrada,hora_salida,valor,vehiculos_idvehiculos,espacios_idespacios FROM cobros WHERE vehiculos_idvehiculos=(SELECT idvehiculos FROM vehiculos WHERE placa='{placa}') ORDER BY hora_entrada DESC LIMIT 1;"
-                            errorMySQL, datosEntregadosMySQL = consultaDBSQL(consultaSQL, dbSQL)
+                            consultaSQL = f"UPDATE espacios SET vehiculos_idvehiculos=NULL WHERE vehiculos_idvehiculos=(SELECT idvehiculos FROM vehiculos WHERE placa='{placa}');"
+                            mensaje, estado, error = actualizarDatosSQL(consultaSQL,dbSQL)
+                            if error is None or not estado:
+                                errorSQL, isConnectedSQL, dbSQL = llamadaBDMySQL()
+                                if errorSQL is None:
+                                    consultaSQL = f"SELECT idcobros,hora_entrada,hora_salida,valor,vehiculos_idvehiculos,espacios_idespacios FROM cobros WHERE vehiculos_idvehiculos=(SELECT idvehiculos FROM vehiculos WHERE placa='{placa}') ORDER BY hora_entrada DESC LIMIT 1;"
+                                    errorMySQL, datosEntregadosMySQL = consultaDBSQL(consultaSQL, dbSQL)
+                                else:
+                                    LOGGER.warning(errorMySQL)
+                            else:
+                                LOGGER.warning(errorMySQL)
+                        else:
+                            LOGGER.warning(errorMySQL)
                     else:
                         LOGGER.warning(errorMySQL)
+            else:
+                LOGGER.warning("No se devolvieron resultados")
         else:
             LOGGER.warning(errorMySQL)
     return datosEntregadosMySQL, errorMySQL
-
