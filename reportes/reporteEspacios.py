@@ -29,7 +29,7 @@ def reporteEspacioLibre():
     if errorSQL is not None:
         LOGGER.warning("Error: Se produjo un error al conectar a la base de datos: %s"%(str(errorSQL)))
     else:
-        consultaSQL = f"SELECT COUNT(*) FROM espacios WHERE isnull(vehiculos);'"
+        consultaSQL = f"SELECT COUNT(*) FROM espacios WHERE isnull(vehiculos_idvehiculos);'"
         errorMySQL, datosEntregadosMySQL = consultaDBSQL(consultaSQL, dbSQL)
     return errorMySQL, datosEntregadosMySQL
 
@@ -38,6 +38,6 @@ def reporteEspacioOcupado():
     if errorSQL is not None:
         LOGGER.warning("Error: Se produjo un error al conectar a la base de datos: %s"%(str(errorSQL)))
     else:
-        consultaSQL = f"SELECT COUNT(*) FROM espacios WHERE vehiculos LIKE '%';"
+        consultaSQL = f"SELECT COUNT(*) FROM espacios WHERE vehiculos_idvehiculos LIKE '%';"
         errorMySQL, datosEntregadosMySQL = consultaDBSQL(consultaSQL,dbSQL)
     return errorMySQL, datosEntregadosMySQL
